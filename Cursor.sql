@@ -1,0 +1,21 @@
+
+DECLARE
+    @SSRef VARCHAR(MAX)
+    , @SSRefCursor CURSOR;
+
+SET @SSRefCursor = CURSOR FAST_FORWARD FOR 
+SELECT SSRef
+FROM dbo.T_Client;
+
+OPEN @SSRefCursor;  
+FETCH NEXT FROM @SSRefCursor INTO @SSRef;  
+
+WHILE (@@FETCH_STATUS = 0)
+BEGIN  
+      PRINT @SSRef;
+
+      FETCH NEXT FROM @SSRefCursor INTO @SSRef
+END 
+
+CLOSE @SSRefCursor;
+DEALLOCATE @SSRefCursor;
