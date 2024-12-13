@@ -1,21 +1,22 @@
-
 DECLARE
-    @SSRef VARCHAR(MAX)
-    , @SSRefCursor CURSOR;
+    @SSRef			VARCHAR(MAX)
+	, @Person		VARCHAR(MAX)
+    , @LocalCursor	CURSOR;
 
-SET @SSRefCursor = CURSOR FAST_FORWARD FOR 
-SELECT SSRef
-FROM dbo.T_Client;
+SET @LocalCursor = CURSOR FAST_FORWARD FOR 
+SELECT C.SSRef, P.Person
+FROM dbo.T_Client C
+JOIN dbo.T_Person P ON C.PersonID = P.PersonID;
 
-OPEN @SSRefCursor;  
-FETCH NEXT FROM @SSRefCursor INTO @SSRef;  
+OPEN @LocalCursor;  
+FETCH NEXT FROM @LocalCursor INTO @SSRef, @Person;  
 
 WHILE (@@FETCH_STATUS = 0)
 BEGIN  
-      PRINT @SSRef;
+      PRINT @SSRef + '/' + @Person;
 
-      FETCH NEXT FROM @SSRefCursor INTO @SSRef
+      FETCH NEXT FROM @LocalCursor INTO @SSRef, @Person;
 END 
 
-CLOSE @SSRefCursor;
-DEALLOCATE @SSRefCursor;
+CLOSE @LocalCursor;
+DEALLOCATE @LocalCursor;
