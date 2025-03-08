@@ -1,0 +1,31 @@
+DECLARE @Client TABLE
+(
+	ClientID				INT				IDENTITY(1,1)
+	, Forename				VARCHAR(MAX)
+	, Surname				VARCHAR(MAX)
+	, AssessmentOfficerID	INT
+);
+
+INSERT INTO @Client (Forename, Surname, AssessmentOfficerID) VALUES ('Anna', 'Apple', 1), ('Bert', 'Banana', NULL), ('Charlie', 'Cherry', 2);
+
+DECLARE @AssessmentOfficer TABLE
+(
+	AssessmentOfficerID		INT				IDENTITY(1,1)
+	, Forename				VARCHAR(MAX)
+	, Surname				VARCHAR(MAX)
+);
+
+INSERT INTO @AssessmentOfficer (Forename, Surname) VALUES ('Martin', 'Melon'), ('Orran', 'Orange');
+
+-- NOTE: Bert is excluded because CROSS APPLY behaves like an INNER JOIN
+SELECT
+	c.Forename
+	, c.Surname
+	, AssessmentOfficerName.[Value]
+FROM @Client c
+CROSS APPLY
+(
+	SELECT [Value] = a.Forename + ' ' + a.Surname
+	FROM @AssessmentOfficer a
+	WHERE a.AssessmentOfficerID = c.AssessmentOfficerID
+) AssessmentOfficerName;
