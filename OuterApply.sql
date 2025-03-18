@@ -17,7 +17,7 @@ DECLARE @AssessmentOfficer TABLE
 
 INSERT INTO @AssessmentOfficer (Forename, Surname) VALUES ('Martin', 'Melon'), ('Orran', 'Orange');
 
--- NOTE: Bert is excluded because OUTER APPLY behaves like a LEFT JOIN
+-- NOTE: Bert is included because OUTER APPLY behaves like a LEFT JOIN
 SELECT
 	c.Forename
 	, c.Surname
